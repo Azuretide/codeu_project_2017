@@ -40,6 +40,8 @@ public final class ClientUser {
   // This is the set of users known to the server, sorted by name.
   private Store<String, User> usersByName = new Store<>(String.CASE_INSENSITIVE_ORDER);
   private final Map<String, String> usernamesToPasswords = new HashMap<>(); // temporary
+  private final Map<String, User> usersNames = new HashMap<>();
+
 
   public ClientUser(Controller controller, View view) {
     this.controller = controller;
@@ -47,13 +49,16 @@ public final class ClientUser {
   }
 
   // Validate the username string
-  static public boolean isValidName(String userName) {
+  public boolean isValidName(String userName) {
     boolean clean = true;
     if (userName.length() == 0) {
       clean = false;
     } else {
 
       // TODO: check for invalid characters
+      if (usersNames.containsKey(userName)) {
+        clean = false;
+      }
 
     }
     return clean;
@@ -96,11 +101,13 @@ public final class ClientUser {
 
   public void addUser(String name, String password) {
     final boolean validInputs = isValidName(name);
+    final boolean exists = usersNames.containsKey(name);
 
     final User user = (validInputs) ? controller.newUser(name) : null;
 
     if (user == null) {
       System.out.format("Error: user not created - %s.\n",
+          (!exists) ? "name failure" : "username already exists",
           (validInputs) ? "server failure" : "bad input value");
     } else {
       usernamesToPasswords.put(name, password);
@@ -141,6 +148,7 @@ public final class ClientUser {
     for (final User user : view.getUsersExcluding(EMPTY)) {
       usersById.put(user.id, user);
       usersByName.insert(user.name, user);
+      usersNames.put(user.name, user);
     }
   }
 
