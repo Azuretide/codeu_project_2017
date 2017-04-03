@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import codeu.chat.common.User;
 import codeu.chat.common.Uuid;
@@ -38,6 +39,7 @@ public final class ClientUser {
 
   // This is the set of users known to the server, sorted by name.
   private Store<String, User> usersByName = new Store<>(String.CASE_INSENSITIVE_ORDER);
+  private final Map<String, String> usernamesToPasswords = new HashMap<>(); // temporary
 
   public ClientUser(Controller controller, View view) {
     this.controller = controller;
@@ -65,15 +67,19 @@ public final class ClientUser {
     return current;
   }
 
-  public boolean signInUser(String name) {
+  public boolean signInUser(String input) {
     updateUsers();
-
+    List<String> namePassword = Arrays.asList(input.split("\\s+"));
+    String name = namePassword.get(0);
+    String password = namePassword.get(1);
     final User prev = current;
-    if (name != null) {
+    if (name != null && usernamesToPasswords.get(name).equals(password)) {
       final User newCurrent = usersByName.first(name);
       if (newCurrent != null) {
         current = newCurrent;
       }
+    } else {
+      System.out.println("Sign in failed. Make sure your username and password is correct.");
     }
     return (prev != current);
   }
@@ -88,7 +94,7 @@ public final class ClientUser {
     printUser(current);
   }
 
-  public void addUser(String name) {
+  public void addUser(String name, String password) {
     final boolean validInputs = isValidName(name);
 
     final User user = (validInputs) ? controller.newUser(name) : null;
@@ -97,6 +103,7 @@ public final class ClientUser {
       System.out.format("Error: user not created - %s.\n",
           (validInputs) ? "server failure" : "bad input value");
     } else {
+      usernamesToPasswords.put(name, password);
       LOG.info("New user complete, Name= \"%s\" UUID=%s", user.name, user.id);
       updateUsers();
     }

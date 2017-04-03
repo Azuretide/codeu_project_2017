@@ -15,6 +15,8 @@
 package codeu.chat.client.commandline;
 
 import java.util.Scanner;
+import java.util.List;
+import java.util.Arrays;
 
 import codeu.chat.client.ClientContext;
 import codeu.chat.client.Controller;
@@ -45,11 +47,11 @@ public final class Chat {
     System.out.println("Chat commands:");
     System.out.println("   exit      - exit the program.");
     System.out.println("   help      - this help message.");
-    System.out.println("   sign-in <username>  - sign in as user <username>.");
+    System.out.println("   sign-in <username> <password> - sign in as user <username>.");
     System.out.println("   sign-out  - sign out current user.");
     System.out.println("   current   - show current user, conversation, message.");
     System.out.println("User commands:");
-    System.out.println("   u-add <name>  - add a new user.");
+    System.out.println("   u-add <username> <space> <password> - add a new user.");
     System.out.println("   u-list-all    - list all users known to system.");
     System.out.println("Conversation commands:");
     System.out.println("   c-add <title>    - add a new conversation.");
@@ -107,7 +109,7 @@ public final class Chat {
     } else if (token.equals("u-add")) {
 
       if (!tokenScanner.hasNext()) {
-        System.out.println("ERROR: Username not supplied.");
+        System.out.println("ERROR: Username and password not supplied.");
       } else {
         addUser(tokenScanner.nextLine().trim());
       }
@@ -193,8 +195,11 @@ public final class Chat {
   }
 
   // Sign in a user.
-  private void signInUser(String name) {
-    if (!clientContext.user.signInUser(name)) {
+  private void signInUser(String input) {
+    List<String> namePassword = Arrays.asList(input.split("\\s+"));
+    String name = namePassword.get(0);
+    String password = namePassword.get(1);
+    if (!clientContext.user.signInUser(input)) {
       System.out.println("Error: sign in failed (invalid name?)");
     }
   }
@@ -266,8 +271,11 @@ public final class Chat {
   }
 
   // Add a new user.
-  private void addUser(String name) {
-    clientContext.user.addUser(name);
+  private void addUser(String input) {
+    List<String> namePassword = Arrays.asList(input.split("\\s+"));
+    String name = namePassword.get(0);
+    String password = namePassword.get(1);
+    clientContext.user.addUser(name, password);
   }
 
   // Display all users known to server.

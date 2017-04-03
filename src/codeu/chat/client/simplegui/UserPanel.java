@@ -24,6 +24,9 @@ import javax.swing.event.ListSelectionListener;
 import codeu.chat.client.ClientContext;
 import codeu.chat.common.User;
 
+import java.util.List;
+import java.util.Arrays;
+
 // NOTE: JPanel is serializable, but there is no need to serialize UserPanel
 // without the @SuppressWarnings, the compiler will complain of no override for serialVersionUID
 @SuppressWarnings("serial")
@@ -160,11 +163,14 @@ public final class UserPanel extends JPanel {
     userAddButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        final String s = (String) JOptionPane.showInputDialog(
+        final String input = (String) JOptionPane.showInputDialog(
             UserPanel.this, "Enter user name:", "Add User", JOptionPane.PLAIN_MESSAGE,
             null, null, "");
-        if (s != null && s.length() > 0) {
-          clientContext.user.addUser(s);
+        List<String> namePassword = Arrays.asList(input.split("\\s+"));
+        String name = namePassword.get(0);
+        String password = namePassword.get(1);
+        if (input != null && input.length() > 0) {
+          clientContext.user.addUser(name, password);
           UserPanel.this.getAllUsers(listModel);
         }
       }
