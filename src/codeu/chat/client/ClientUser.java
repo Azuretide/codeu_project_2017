@@ -39,7 +39,6 @@ public final class ClientUser {
 
   // This is the set of users known to the server, sorted by name.
   private Store<String, User> usersByName = new Store<>(String.CASE_INSENSITIVE_ORDER);
-  private final Map<String, String> usernamesToPasswords = new HashMap<>(); // temporary
   private final Map<String, User> usersNames = new HashMap<>();
 
 
@@ -78,11 +77,13 @@ public final class ClientUser {
     String name = namePassword.get(0);
     String password = namePassword.get(1);
     final User prev = current;
-    if (name != null && usernamesToPasswords.get(name).equals(password)) {
+    
+    if (view.matchPassword(name, password)) {
       final User newCurrent = usersByName.first(name);
       if (newCurrent != null) {
         current = newCurrent;
       }
+      System.out.println("sign in as " + current.name + " successful");
     } else {
       System.out.println("Sign in failed. Make sure your username and password is correct.");
     }
@@ -103,14 +104,13 @@ public final class ClientUser {
     final boolean validInputs = isValidName(name);
     final boolean exists = usersNames.containsKey(name);
 
-    final User user = (validInputs) ? controller.newUser(name) : null;
+    final User user = (validInputs) ? controller.newUser(name,password) : null;
 
     if (user == null) {
       System.out.format("Error: user not created - %s.\n",
           (!exists) ? "name failure" : "username already exists",
           (validInputs) ? "server failure" : "bad input value");
     } else {
-      usernamesToPasswords.put(name, password);
       LOG.info("New user complete, Name= \"%s\" UUID=%s", user.name, user.id);
       updateUsers();
     }
