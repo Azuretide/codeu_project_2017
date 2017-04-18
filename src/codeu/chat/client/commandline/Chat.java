@@ -23,6 +23,7 @@ import codeu.chat.client.Controller;
 import codeu.chat.client.View;
 import codeu.chat.common.ConversationSummary;
 import codeu.chat.util.Logger;
+import java.io.Console;
 
 // Chat - top-level client application.
 public final class Chat {
@@ -91,7 +92,11 @@ public final class Chat {
       if (!tokenScanner.hasNext()) {
         System.out.println("ERROR: No user name supplied.");
       } else {
-        signInUser(tokenScanner.nextLine().trim());
+        //signInUser(tokenScanner.nextLine().trim());
+        String username = tokenScanner.nextLine().trim();
+        System.out.println("Please enter your password:");
+        doPasswordCommand(lineScanner, username);
+        //signInUser(tokenScanner.nextLine().trim());
       }
 
     } else if (token.equals("sign-out")) {
@@ -193,14 +198,27 @@ public final class Chat {
     }
     tokenScanner.close();
   }
-
+  
+//Parse and execute password command.
+ private void doPasswordCommand(Scanner lineScanner, String username) {
+   promptForCommand();
+   final Scanner tokenScanner = new Scanner(lineScanner.nextLine());
+   String password = tokenScanner.nextLine().trim();
+//   char passwordArray[] = Console.readPassword("Enter your secret password: ");
+//   String password = new String(passwordArray);
+//   System.out.println(password);
+   signInUser(username, password);
+ }
+   
   // Sign in a user.
-  private void signInUser(String input) {
-    List<String> namePassword = Arrays.asList(input.split("\\s+"));
-    String name = namePassword.get(0);
-    String password = namePassword.get(1);
-    if (!clientContext.user.signInUser(input)) {
-      System.out.println("Error: sign in failed (invalid name?)");
+  private void signInUser(String username, String password) {
+//    List<String> namePassword = Arrays.asList(input.split("\\s+"));
+//    String name = namePassword.get(0);
+//    String password = namePassword.get(1);
+    if (!clientContext.user.signInUser(username, password)) {
+      System.out.println("Error: Please try signing in again!");
+    } else {
+      System.out.println("Hello " + username + "!");
     }
   }
 
@@ -289,6 +307,7 @@ public final class Chat {
       promptForCommand();
       doOneCommand(lineScanner);
     } catch (Exception ex) {
+      System.out.println("oh???");
       System.out.println("ERROR: Exception during command processing. Check log for details.");
       LOG.error(ex, "Exception during command processing");
     }

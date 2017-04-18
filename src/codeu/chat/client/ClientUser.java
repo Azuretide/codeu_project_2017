@@ -72,19 +72,23 @@ public final class ClientUser {
     return current;
   }
 
-  public boolean signInUser(String input) {
+  public boolean signInUser(String username, String password) {
     updateUsers();
-    List<String> namePassword = Arrays.asList(input.split("\\s+"));
-    String name = namePassword.get(0);
-    String password = namePassword.get(1);
+    // List<String> namePassword = Arrays.asList(input.split("\\s+"));
+    // String name = namePassword.get(0);
+    // String password = namePassword.get(1);
+    if (! usernamesToPasswords.containsKey(username)) {
+      System.out.println("Username does not exist.");
+      return false;
+    }
     final User prev = current;
-    if (name != null && usernamesToPasswords.get(name).equals(password)) {
-      final User newCurrent = usersByName.first(name);
+    if (username != null && usernamesToPasswords.get(username).equals(password)) {
+      final User newCurrent = usersByName.first(username);
       if (newCurrent != null) {
         current = newCurrent;
       }
     } else {
-      System.out.println("Sign in failed. Make sure your username and password is correct.");
+      System.out.println("Sign in failed. Make sure your password is correct.");
     }
     return (prev != current);
   }

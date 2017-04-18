@@ -1,16 +1,20 @@
-Apr 03, 2017 7:24:07 PM codeu.chat.ClientMain main
+Apr 17, 2017 6:49:25 PM codeu.chat.ClientMain main
 INFO: ============================= START OF LOG =============================
-Apr 03, 2017 7:24:07 PM codeu.chat.ClientMain main
+Apr 17, 2017 6:49:25 PM codeu.chat.ClientMain main
 INFO: Starting chat client...
-Apr 03, 2017 7:24:07 PM codeu.chat.ClientMain main
+Apr 17, 2017 6:49:25 PM codeu.chat.ClientMain main
 INFO: Creating client...
-Apr 03, 2017 7:24:07 PM codeu.chat.ClientMain main
+Apr 17, 2017 6:49:25 PM codeu.chat.ClientMain main
 INFO: Created client
-Apr 03, 2017 7:24:11 PM codeu.chat.client.Controller newUser
+Apr 17, 2017 6:49:29 PM codeu.chat.client.Controller newUser
 INFO: newUser: Request completed.
-Apr 03, 2017 7:24:11 PM codeu.chat.client.Controller newUser
+Apr 17, 2017 6:49:29 PM codeu.chat.client.Controller newUser
 INFO: newUser: Response completed.
-Apr 03, 2017 7:24:11 PM codeu.chat.client.ClientUser addUser
-INFO: New user complete, Name= "pooh" UUID=[UUID:100.101.1620951605]
-Apr 03, 2017 7:24:26 PM codeu.chat.ClientMain main
-INFO: chat client has exited.
+Apr 17, 2017 6:49:29 PM codeu.chat.client.ClientUser addUser
+INFO: New user complete, Name= "janice" UUID=[UUID:100.101.472438562]
+Apr 17, 2017 6:49:33 PM codeu.chat.client.Controller newUser
+INFO: newUser: Request completed.
+Apr 17, 2017 6:49:33 PM codeu.chat.client.Controller newUser
+INFO: newUser: Response completed.
+Apr 17, 2017 6:49:33 PM codeu.chat.client.ClientUser addUser
+INFO: New user complete, Name= "richard" UUID=[UUID:100.101.1713600728]
