@@ -137,8 +137,10 @@ public final class Server {
     } else if (type == NetworkCode.NEW_USER_REQUEST) {
 
       final String name = Serializers.STRING.read(in);
+      final String password = Serializers.STRING.read(in);
 
-      final User user = controller.newUser(name);
+//      final User user = controller.newUser(name);
+      final User user = controller.newUser(name,password);
 
       Serializers.INTEGER.write(out, NetworkCode.NEW_USER_RESPONSE);
       Serializers.nullable(User.SERIALIZER).write(out, user);
@@ -241,7 +243,21 @@ public final class Server {
       Serializers.INTEGER.write(out, NetworkCode.GET_MESSAGES_BY_RANGE_RESPONSE);
       Serializers.collection(Message.SERIALIZER).write(out, messages);
 
-    } else {
+    } else if (type == NetworkCode.MATCH_PASSWORD_REQUEST) {
+        
+        final String name = Serializers.STRING.read(in);
+        final String attempt = Serializers.STRING.read(in);
+        
+        final boolean result = controller.matchPassword(name, attempt);
+        System.out.println("Server: " + result);
+        
+        Serializers.INTEGER.write(out, NetworkCode.MATCH_PASSWORD_RESPONSE);
+        Serializers.BOOLEAN.write(out, result);
+        
+    }
+    
+    
+    else {
 
       // In the case that the message was not handled make a dummy message with
       // the type "NO_MESSAGE" so that the client still gets something.

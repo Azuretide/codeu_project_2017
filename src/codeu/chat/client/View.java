@@ -16,6 +16,7 @@ package codeu.chat.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import codeu.chat.common.BasicView;
 import codeu.chat.common.Conversation;
@@ -279,5 +280,31 @@ public final class View implements BasicView, LogicalView{
     }
 
     return messages;
+  }
+  
+  //Should probably try to add to Vew Interfaces after approval
+  public boolean matchPassword(String name, String password) {
+      
+      boolean result = false;
+      
+      try (final Connection connection = source.connect()) {
+
+          Serializers.INTEGER.write(connection.out(), NetworkCode.MATCH_PASSWORD_REQUEST);
+          Serializers.STRING.write(connection.out(), name);
+          Serializers.STRING.write(connection.out(), password);
+
+          if (Serializers.INTEGER.read(connection.in()) == NetworkCode.MATCH_PASSWORD_RESPONSE) {
+              result = Serializers.BOOLEAN.read(connection.in());
+              System.out.println("View: " + result);
+          } else {
+            LOG.error("Response from server failed.");
+          }
+
+        } catch (Exception ex) {
+          System.out.println("ERROR: Exception during call on server. Check log for details.");
+          LOG.error(ex, "Exception during call on server.");
+        }
+
+      return result;
   }
 }

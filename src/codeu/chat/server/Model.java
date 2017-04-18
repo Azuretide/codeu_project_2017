@@ -15,6 +15,8 @@
 package codeu.chat.server;
 
 import java.util.Comparator;
+import java.util.Map;
+import java.util.HashMap;
 
 import codeu.chat.common.Conversation;
 import codeu.chat.common.ConversationSummary;
@@ -27,8 +29,8 @@ import codeu.chat.util.store.StoreAccessor;
 import codeu.chat.util.Uuid;
 
 public final class Model {
-
-  private static final Comparator<Uuid> UUID_COMPARE = new Comparator<Uuid>() {
+    
+    private static final Comparator<Uuid> UUID_COMPARE = new Comparator<Uuid>() {
 
     @Override
     public int compare(Uuid a, Uuid b) {
@@ -56,6 +58,7 @@ public final class Model {
   private final Store<Uuid, User> userById = new Store<>(UUID_COMPARE);
   private final Store<Time, User> userByTime = new Store<>(TIME_COMPARE);
   private final Store<String, User> userByText = new Store<>(STRING_COMPARE);
+  private final Map<String, String> usernamePassword = new HashMap<>();
 
   private final Store<Uuid, Conversation> conversationById = new Store<>(UUID_COMPARE);
   private final Store<Time, Conversation> conversationByTime = new Store<>(TIME_COMPARE);
@@ -75,6 +78,20 @@ public final class Model {
     userByTime.insert(user.creation, user);
     userByText.insert(user.name, user);
   }
+  
+  /**
+   * Overloaded add method for users to add password support
+   * @param user the User whose account to create
+   * @param password the supplied password for this given account
+   */
+  public void add(User user, String password) {
+      currentUserGeneration = userGenerations.make();
+
+      userById.insert(user.id, user);
+      userByTime.insert(user.creation, user);
+      userByText.insert(user.name, user);
+      usernamePassword.put(user.name, password);
+    }
 
   public StoreAccessor<Uuid, User> userById() {
     return userById;
@@ -126,5 +143,17 @@ public final class Model {
 
   public StoreAccessor<String, Message> messageByText() {
     return messageByText;
+  }
+  
+  /**
+   * Attempts to match the user attempt with the actual password associated with that username
+   * @param name the username of the attempted login
+   * @param attempt the password given by the user
+   * @return whether the user supplied password matches the actual password for the given user
+   */
+  public boolean matchPassword(String name, String attempt) {
+      if (!usernamePassword.containsKey(name)) return false;
+      String correctPass = usernamePassword.get(name);
+      return correctPass.equals(attempt);
   }
 }

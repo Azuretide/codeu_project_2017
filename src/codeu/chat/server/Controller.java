@@ -46,6 +46,17 @@ public final class Controller implements RawController, BasicController {
   public User newUser(String name) {
     return newUser(createId(), name, Time.now());
   }
+  
+  /**
+   * An alternate newUser method that takes in password in addition to username.
+   * Will update method above in BasicController Interface once approved.
+   * @param name the desired username
+   * @param password the desired password
+   * @return the new User object generated
+   */
+  public User newUser(String name, String password) {
+    return newUser(createId(), name, Time.now(), password);
+  }
 
   @Override
   public Conversation newConversation(String title, Uuid owner) {
@@ -128,6 +139,38 @@ public final class Controller implements RawController, BasicController {
 
     return user;
   }
+  
+  /**
+   * An alternate newUser that takes in the password in addition to the id, name, and creationTime.
+   * Will replace above method in RawController Interface once approved.
+   * @param id unique ID of the user
+   * @param name the desired username
+   * @param creationTime auto-generated time of creation
+   * @param password the desired password for this account
+   * @return the new User object created
+   */
+  public User newUser(Uuid id, String name, Time creationTime, String password) {
+
+    User user = null;
+    
+    if (isIdFree(id)) {
+      user = new User(id, name, creationTime);
+      model.add(user, password);
+
+      LOG.info(
+          "newUser with password success (user.id=%s user.name=%s user.time=%s)",
+          id,
+          name,
+          creationTime);
+    } else {
+      LOG.info(
+          "newUser fail - id in use (user.id=%s user.name=%s user.time=%s)",
+          id,
+          name,
+          creationTime);
+    }
+    return user;
+  }
 
   @Override
   public Conversation newConversation(Uuid id, String title, Uuid owner, Time creationTime) {
@@ -144,6 +187,12 @@ public final class Controller implements RawController, BasicController {
     }
 
     return conversation;
+  }
+  
+  // Called from Server.java, attempts to match input with the real password
+  // returns true if passwords match, false otherwise
+  public boolean matchPassword(String name, String attempt) {
+      return model.matchPassword(name, attempt);
   }
 
   private Uuid createId() {
