@@ -152,25 +152,28 @@ public final class UserPanel extends JPanel {
     userSignInButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // if (userList.getSelectedIndex() != -1) {
-        //   final String data = userList.getSelectedValue();
-        //   clientContext.user.signInUser(data); // hmm?
-        //   userSignedInLabel.setText("Hello " + data);
-        // }
+        if (userList.getSelectedIndex() != -1) {
+          final String username = userList.getSelectedValue();
+            final String password = (String) JOptionPane.showInputDialog(
+              UserPanel.this, "Enter your password:", "Sign in", JOptionPane.PLAIN_MESSAGE,
+              null, null, "");
+          clientContext.user.signInUser(username, password);
+          userSignedInLabel.setText("Hello " + username);
+        }
       }
     });
 
     userAddButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        final String input = (String) JOptionPane.showInputDialog(
+        final String username = (String) JOptionPane.showInputDialog(
             UserPanel.this, "Enter user name:", "Add User", JOptionPane.PLAIN_MESSAGE,
             null, null, "");
-        List<String> namePassword = Arrays.asList(input.split("\\s+"));
-        String name = namePassword.get(0);
-        String password = namePassword.get(1);
-        if (input != null && input.length() > 0) {
-          clientContext.user.addUser(name, password);
+        final String password = (String) JOptionPane.showInputDialog(
+            UserPanel.this, "Enter password:", "Add User", JOptionPane.PLAIN_MESSAGE,
+            null, null, "");
+        if (username != null && username.length() > 0) {
+          clientContext.user.addUser(username, password);
           UserPanel.this.getAllUsers(listModel);
         }
       }
