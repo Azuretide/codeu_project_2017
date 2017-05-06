@@ -73,13 +73,7 @@ public final class ClientUser {
 
   public boolean signInUser(String username, String password) {
     updateUsers();
-    // List<String> namePassword = Arrays.asList(input.split("\\s+"));
-    // String name = namePassword.get(0);
-    // String password = namePassword.get(1);
-    // if (! usernamesToPasswords.containsKey(username)) {
-    //   System.out.println("Username does not exist.");
-    //   return false;
-    // }
+
     final User prev = current;
     
     if (view.matchPassword(username, password)) {
@@ -111,7 +105,7 @@ public final class ClientUser {
     final boolean validInputs = isValidName(name);
     final boolean exists = usersNames.containsKey(name);
 
-    final User user = (validInputs) ? controller.newUser(name,password) : null;
+    final User user = (validInputs) ? controller.newUser(name, password) : null;
 
     if (user == null) {
       System.out.format("Error: user not created - %s.\n",

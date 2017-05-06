@@ -154,9 +154,9 @@ public final class UserPanel extends JPanel {
       public void actionPerformed(ActionEvent e) {
         if (userList.getSelectedIndex() != -1) {
           final String username = userList.getSelectedValue();
-            final String password = (String) JOptionPane.showInputDialog(
-              UserPanel.this, "Enter your password:", "Sign in", JOptionPane.PLAIN_MESSAGE,
-              null, null, "");
+          final String password = (String) JOptionPane.showInputDialog(
+            UserPanel.this, "Enter your password:", "Sign in", JOptionPane.PLAIN_MESSAGE,
+            null, null, "");
           clientContext.user.signInUser(username, password);
           userSignedInLabel.setText("Hello " + username);
         }

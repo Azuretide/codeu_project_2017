@@ -55,7 +55,7 @@ public final class Controller implements RawController, BasicController {
    * @return the new User object generated
    */
   public User newUser(String name, String password) {
-    return newUser(createId(), name, Time.now(), password);
+    return newUser(createId(), name, password, Time.now());
   }
 
   @Override
@@ -149,7 +149,7 @@ public final class Controller implements RawController, BasicController {
    * @param password the desired password for this account
    * @return the new User object created
    */
-  public User newUser(Uuid id, String name, Time creationTime, String password) {
+  public User newUser(Uuid id, String name, String password, Time creationTime) {
 
     User user = null;
     

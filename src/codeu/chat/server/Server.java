@@ -139,7 +139,6 @@ public final class Server {
       final String name = Serializers.STRING.read(in);
       final String password = Serializers.STRING.read(in);
 
-//      final User user = controller.newUser(name);
       final User user = controller.newUser(name,password);
 
       Serializers.INTEGER.write(out, NetworkCode.NEW_USER_RESPONSE);
