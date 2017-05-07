@@ -14,8 +14,6 @@
 
 package codeu.chat.server;
 
-import java.util.Collection;
-
 import codeu.chat.common.BasicController;
 import codeu.chat.common.Conversation;
 import codeu.chat.common.Message;
@@ -41,19 +39,8 @@ public final class Controller implements RawController, BasicController {
   public Message newMessage(Uuid author, Uuid conversation, String body) {
     return newMessage(createId(), author, conversation, body, Time.now());
   }
-
-  @Override
-  public User newUser(String name) {
-    return newUser(createId(), name, Time.now());
-  }
   
-  /**
-   * An alternate newUser method that takes in password in addition to username.
-   * Will update method above in BasicController Interface once approved.
-   * @param name the desired username
-   * @param password the desired password
-   * @return the new User object generated
-   */
+  @Override
   public User newUser(String name, String password) {
     return newUser(createId(), name, password, Time.now());
   }
@@ -142,7 +129,6 @@ public final class Controller implements RawController, BasicController {
   
   /**
    * An alternate newUser that takes in the password in addition to the id, name, and creationTime.
-   * Will replace above method in RawController Interface once approved.
    * @param id unique ID of the user
    * @param name the desired username
    * @param creationTime auto-generated time of creation

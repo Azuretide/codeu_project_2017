@@ -208,6 +208,7 @@ public final class Chat {
 //   String password = new String(passwordArray);
 //   System.out.println(password);
    signInUser(username, password);
+   tokenScanner.close();
  }
    
   // Sign in a user.
