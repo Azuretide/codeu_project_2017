@@ -24,5 +24,5 @@ if [ -f $junit_jar_path ] ; then
 fi
 
 mkdir -p bin
-javac -Xlint $(find * | grep "\\.java$") -d ./bin -sourcepath src -cp third_party/junit4.jar
-javac -Xlint $(find * | grep "\\.java$") -d ./bin -sourcepath test -cp third_party/junit4.jar
+javac -Xlint $(find * | grep "\\.java$") -d ./bin -sourcepath src -cp third_party/junit4.jar\;third_party/mongo-java-driver-3.4.2.jar
+javac -Xlint $(find * | grep "\\.java$") -d ./bin -sourcepath test -cp third_party/junit4.jar\;third_party/mongo-java-driver-3.4.2.jar

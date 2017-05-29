@@ -15,4 +15,4 @@
 # limitations under the License.
 
 cd './bin'
-java codeu.chat.ServerMain "100.101" "ABABAB" "2007"
+java -cp .\;../third_party/junit4.jar\;../third_party/mongo-java-driver-3.4.2.jar codeu.chat.ServerMain "100.101" "ABABAB" "2007"

@@ -82,6 +82,9 @@ final class ServerMain {
     final Server server = new Server(id, secret, relay);
 
     LOG.info("Created server.");
+    
+    // Put code to sync model data structures here
+    server.syncModel();
 
     while (true) {
 

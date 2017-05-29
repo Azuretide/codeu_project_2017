@@ -85,6 +85,14 @@ public final class Server {
       }
     });
   }
+  
+  /**
+   * Restores account information from the database.
+   */
+  public void syncModel() {
+      LOG.info("Fetching user data...");
+      model.syncModel();
+  }
 
   public void handleConnection(final Connection connection) {
     timeline.scheduleNow(new Runnable() {
