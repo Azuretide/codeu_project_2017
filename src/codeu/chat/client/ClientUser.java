@@ -16,9 +16,11 @@ package codeu.chat.client;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import codeu.chat.common.User;
 import codeu.chat.util.Logger;
@@ -123,6 +125,14 @@ public final class ClientUser {
       printUser(u);
     }
   }
+  
+  /**
+   * Returns an immutable set of all usernames known to the system.
+   * Used to allow signing in to fail fast if requested user does not exist
+   */
+  public Set<String> getAllUsernames() {
+      return Collections.unmodifiableSet(usersNames.keySet());
+  }
 
   public User lookup(Uuid id) {
     return (usersById.containsKey(id)) ? usersById.get(id) : null;
@@ -166,4 +176,5 @@ public final class ClientUser {
   public static void printUser(User user) {
     System.out.println(getUserInfoString(user));
   }
+
 }
