@@ -23,12 +23,12 @@ import codeu.chat.common.Conversation;
 import codeu.chat.common.ConversationSummary;
 import codeu.chat.common.LinearUuidGenerator;
 import codeu.chat.common.Message;
-import codeu.chat.common.Time;
 import codeu.chat.common.User;
+import codeu.chat.util.Time;
+import codeu.chat.util.Uuid;
 import codeu.chat.util.store.Store;
 import codeu.chat.util.store.StoreAccessor;
 import codeu.chat.util.EncryptHelper;
-import codeu.chat.util.Uuid;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -197,7 +197,7 @@ public final class Model {
               final Document next = cursor.next();
               final String rawID = (String) next.get("id");
               final String realID = rawID.substring(rawID.indexOf(':')+1,rawID.indexOf(']')-1);
-              final User user = new User(Uuid.fromString(realID),(String) next.get("username"),Time.fromMs((long) next.get("time")));
+              final User user = new User(Uuid.parse(realID),(String) next.get("username"),Time.fromMs((long) next.get("time")));
               usernameSalt.put(user.name, (String) next.get("salt"));
               usernamePassword.put(user.name, (String) next.get("password"));
               
@@ -205,6 +205,9 @@ public final class Model {
               userByTime.insert(user.creation, user);
               userByText.insert(user.name, user);
           }
+      } catch (Exception e) {
+          System.out.println("data error: unable to parse database info");
+      
       } finally {
           cursor.close();
       }
