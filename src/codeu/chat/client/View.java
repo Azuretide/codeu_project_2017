@@ -16,7 +16,6 @@ package codeu.chat.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 import codeu.chat.common.BasicView;
 import codeu.chat.common.Conversation;
@@ -24,10 +23,10 @@ import codeu.chat.common.ConversationSummary;
 import codeu.chat.common.LogicalView;
 import codeu.chat.common.Message;
 import codeu.chat.common.NetworkCode;
-import codeu.chat.common.Time;
 import codeu.chat.common.User;
 import codeu.chat.util.Logger;
 import codeu.chat.util.Serializers;
+import codeu.chat.util.Time;
 import codeu.chat.util.Uuid;
 import codeu.chat.util.connections.Connection;
 import codeu.chat.util.connections.ConnectionSource;
@@ -127,7 +126,7 @@ public final class View implements BasicView, LogicalView{
       Serializers.INTEGER.write(connection.out(), NetworkCode.GET_MESSAGES_BY_ID_REQUEST);
       Serializers.collection(Uuid.SERIALIZER).write(connection.out(), ids);
 
-      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.GET_CONVERSATIONS_BY_ID_RESPONSE) {
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.GET_MESSAGES_BY_ID_RESPONSE) {
         messages.addAll(Serializers.collection(Message.SERIALIZER).read(connection.in()));
       } else {
         LOG.error("Response from server failed.");
@@ -282,7 +281,14 @@ public final class View implements BasicView, LogicalView{
     return messages;
   }
   
-  //Should probably try to add to Vew Interfaces after approval
+  /**
+   * Attempts to log into the account specified by name using the given password.
+   * Returns true if the given password matches the password associated with the
+   * account, false otherwise.
+   * @param name the username of the target account
+   * @param password password attempt submitted by user
+   * @return whether the login was successful
+   */
   public boolean matchPassword(String name, String password) {
       
       boolean result = false;

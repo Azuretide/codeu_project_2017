@@ -94,9 +94,13 @@ public final class Chat {
       } else {
         //signInUser(tokenScanner.nextLine().trim());
         String username = tokenScanner.nextLine().trim();
-        System.out.println("Please enter your password:");
-        doPasswordCommand(lineScanner, username);
-        //signInUser(tokenScanner.nextLine().trim());
+        if (clientContext.user.getAllUsernames().contains(username)) {
+          System.out.println("Please enter your password:");
+          doPasswordCommand(lineScanner, username);
+          //signInUser(tokenScanner.nextLine().trim());
+        } else {
+          System.out.println("ERROR: no account data present for: " + username);
+        }
       }
 
     } else if (token.equals("sign-out")) {
@@ -208,6 +212,7 @@ public final class Chat {
 //   String password = new String(passwordArray);
 //   System.out.println(password);
    signInUser(username, password);
+   tokenScanner.close();
  }
    
   // Sign in a user.

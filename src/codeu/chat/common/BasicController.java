@@ -35,12 +35,11 @@ public interface BasicController {
 
   // NEW USER
   //
-  //   Create a new user on the server. All parameters must be provided
-  //   or else the server won't apply the change. If the operation is
-  //   successful, a User object will be returned representing the full
-  //   state of the user on the server. Whether user names can be shared
-  //   is undefined.
-  User newUser(String name);
+  //   Create a new user on the server with the specified password. 
+  //   All parameters must be provided or else the server won't apply 
+  //   the change. If the operation is successful, a User object will be 
+  //   returned representing the full state of the user on the server.
+  User newUser(String name, String password);
 
   // NEW CONVERSATION
   //
