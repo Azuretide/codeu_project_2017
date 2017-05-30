@@ -16,22 +16,35 @@ package codeu.chat.server;
 
 import java.util.Comparator;
 import java.util.Map;
+
 import java.util.HashMap;
 
 import codeu.chat.common.Conversation;
 import codeu.chat.common.ConversationSummary;
 import codeu.chat.common.LinearUuidGenerator;
 import codeu.chat.common.Message;
-import codeu.chat.common.Time;
 import codeu.chat.common.User;
+import codeu.chat.util.Time;
+import codeu.chat.util.Uuid;
 import codeu.chat.util.store.Store;
 import codeu.chat.util.store.StoreAccessor;
-import codeu.chat.util.Uuid;
+import codeu.chat.util.EncryptHelper;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import org.bson.Document;
 
 public final class Model {
     
+    //Connecting to the database
+    MongoClient mongoClient = new MongoClient("localhost", 27017);
+    MongoDatabase database = mongoClient.getDatabase("codeu");
+    MongoCollection<Document> collection = database.getCollection("users");
+    
     private static final Comparator<Uuid> UUID_COMPARE = new Comparator<Uuid>() {
-
+        
     @Override
     public int compare(Uuid a, Uuid b) {
 
@@ -59,6 +72,7 @@ public final class Model {
   private final Store<Time, User> userByTime = new Store<>(TIME_COMPARE);
   private final Store<String, User> userByText = new Store<>(STRING_COMPARE);
   private final Map<String, String> usernamePassword = new HashMap<>();
+  private final Map<String, String> usernameSalt = new HashMap<>();
 
   private final Store<Uuid, Conversation> conversationById = new Store<>(UUID_COMPARE);
   private final Store<Time, Conversation> conversationByTime = new Store<>(TIME_COMPARE);
@@ -85,13 +99,27 @@ public final class Model {
    * @param password the supplied password for this given account
    */
   public void add(User user, String password) {
-      currentUserGeneration = userGenerations.make();
+    try {
+        final String salt = EncryptHelper.getSalt();
+        final String encPass = EncryptHelper.getSecurePassword(password, salt);
+        usernameSalt.put(user.name, salt);
+        usernamePassword.put(user.name, encPass);
+        
+        currentUserGeneration = userGenerations.make();
 
-      userById.insert(user.id, user);
-      userByTime.insert(user.creation, user);
-      userByText.insert(user.name, user);
-      usernamePassword.put(user.name, password);
+        userById.insert(user.id, user);
+        userByTime.insert(user.creation, user);
+        userByText.insert(user.name, user);
+        
+        //Also insert into database
+        Document doc = new Document("username", user.name).append("id", user.id.toString()).append("time", user.creation.inMs()).append("password", encPass).append("salt", salt);
+        collection.insertOne(doc);
+    } catch (Exception e) {
+        System.out.println("Error with encryption");
+        e.printStackTrace();
     }
+      
+  }
 
   public StoreAccessor<Uuid, User> userById() {
     return userById;
@@ -152,8 +180,36 @@ public final class Model {
    * @return whether the user supplied password matches the actual password for the given user
    */
   public boolean matchPassword(String name, String attempt) {
-      if (!usernamePassword.containsKey(name)) return false;
+      if (!usernamePassword.containsKey(name) || !usernameSalt.containsKey(name)) return false;
+      String encryptAttempt = EncryptHelper.getSecurePassword(attempt, usernameSalt.get(name));
       String correctPass = usernamePassword.get(name);
-      return correctPass.equals(attempt);
+      
+      return correctPass.equals(encryptAttempt);
+  }
+  
+  /** 
+   * Restores account information from the database.
+   */
+  public void syncModel() {
+      MongoCursor<Document> cursor = collection.find().iterator();
+      try {
+          while (cursor.hasNext()) {
+              final Document next = cursor.next();
+              final String rawID = (String) next.get("id");
+              final String realID = rawID.substring(rawID.indexOf(':')+1,rawID.indexOf(']')-1);
+              final User user = new User(Uuid.parse(realID),(String) next.get("username"),Time.fromMs((long) next.get("time")));
+              usernameSalt.put(user.name, (String) next.get("salt"));
+              usernamePassword.put(user.name, (String) next.get("password"));
+              
+              userById.insert(user.id, user);
+              userByTime.insert(user.creation, user);
+              userByText.insert(user.name, user);
+          }
+      } catch (Exception e) {
+          System.out.println("data error: unable to parse database info");
+      
+      } finally {
+          cursor.close();
+      }
   }
 }
