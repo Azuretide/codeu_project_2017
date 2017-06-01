@@ -301,7 +301,6 @@ public final class View implements BasicView, LogicalView{
 
           if (Serializers.INTEGER.read(connection.in()) == NetworkCode.MATCH_PASSWORD_RESPONSE) {
               result = Serializers.BOOLEAN.read(connection.in());
-              System.out.println("View: " + result);
           } else {
             LOG.error("Response from server failed.");
           }

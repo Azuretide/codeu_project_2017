@@ -208,20 +208,14 @@ public final class Chat {
    promptForCommand();
    final Scanner tokenScanner = new Scanner(lineScanner.nextLine());
    String password = tokenScanner.nextLine().trim();
-//   char passwordArray[] = Console.readPassword("Enter your secret password: ");
-//   String password = new String(passwordArray);
-//   System.out.println(password);
    signInUser(username, password);
    tokenScanner.close();
  }
    
   // Sign in a user.
   private void signInUser(String username, String password) {
-//    List<String> namePassword = Arrays.asList(input.split("\\s+"));
-//    String name = namePassword.get(0);
-//    String password = namePassword.get(1);
     if (!clientContext.user.signInUser(username, password)) {
-      System.out.println("Error: Please try signing in again!");
+      System.out.println("Error: Please make sure your username and password are correct.");
     } else {
       System.out.println("Hello " + username + "!");
     }

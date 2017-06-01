@@ -86,9 +86,6 @@ public final class ClientUser {
         current = newCurrent;
       }
       System.out.println("Sign in as " + current.name + " successful");
-
-    } else {
-      System.out.println("Sign in failed. Make sure your username and password is correct.");
     }
     return (prev != current);
   }
