@@ -306,7 +306,6 @@ public final class Chat {
       promptForCommand();
       doOneCommand(lineScanner);
     } catch (Exception ex) {
-      System.out.println("oh???");
       System.out.println("ERROR: Exception during command processing. Check log for details.");
       LOG.error(ex, "Exception during command processing");
     }

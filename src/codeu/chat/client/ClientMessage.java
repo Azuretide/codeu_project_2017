@@ -115,6 +115,7 @@ public final class ClientMessage {
   // Show all messages attached to the current conversation. This will balk if the conversation
   // has too many messages (use m-next and m-show instead).
   public void showAllMessages() {
+    updateMessages(false);
     if (conversationContents.size() == 0) {
       System.out.println(" Current Conversation has no messages");
     } else {
