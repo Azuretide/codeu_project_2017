@@ -14,13 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-PORT="$1"
+HOST="$1"
+PORT="$2"
 
-if [[ "${PORT}" == "" ]] ; then
-  echo 'usage: <PORT>'
+if [[ "${HOST}" == "" || "${PORT}" == "" ]] ; then
+  echo 'usage: <HOST> <PORT>'
   exit 1
 fi
 
 cd './bin'
 
-java codeu.chat.SimpleGuiClientMain "localhost@${PORT}"
+java codeu.chat.SimpleGuiClientMain "${HOST}@${PORT}"
