@@ -174,7 +174,6 @@ public final class Chat {
 
     } else if (token.equals("m-next")) {
 
-      // TODO: Implement m-next command to jump to an index in the message chain.
       if (!clientContext.conversation.hasCurrent()) {
         System.out.println("ERROR: No conversation selected.");
       } else if (!tokenScanner.hasNextInt()) {
@@ -185,7 +184,6 @@ public final class Chat {
 
     } else if (token.equals("m-show")) {
 
-      // TODO: Implement m-show command to show N messages (currently just show all)
       if (!clientContext.conversation.hasCurrent()) {
         System.out.println("ERROR: No conversation selected.");
       } else {
@@ -203,7 +201,7 @@ public final class Chat {
     tokenScanner.close();
   }
   
-//Parse and execute password command.
+  //Parse and execute password command.
  private void doPasswordCommand(Scanner lineScanner, String username) {
    promptForCommand();
    final Scanner tokenScanner = new Scanner(lineScanner.nextLine());

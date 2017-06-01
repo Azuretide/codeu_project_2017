@@ -56,7 +56,6 @@ public final class ClientUser {
       clean = false;
     } else {
 
-      // TODO: check for invalid characters
       if (usersNames.containsKey(userName)) {
         clean = false;
       }
@@ -170,7 +169,6 @@ public final class ClientUser {
     return getUserInfoString(usersByName.first(uname));
   }
 
-  // Move to User's toString()
   public static void printUser(User user) {
     System.out.println(getUserInfoString(user));
   }
