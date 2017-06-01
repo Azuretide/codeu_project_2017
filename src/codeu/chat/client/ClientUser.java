@@ -128,6 +128,7 @@ public final class ClientUser {
    * Used to allow signing in to fail fast if requested user does not exist
    */
   public Set<String> getAllUsernames() {
+      updateUsers();
       return Collections.unmodifiableSet(usersNames.keySet());
   }
 
