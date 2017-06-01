@@ -31,6 +31,7 @@ import codeu.chat.util.store.StoreAccessor;
 import codeu.chat.util.EncryptHelper;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -39,7 +40,8 @@ import org.bson.Document;
 public final class Model {
     
     //Connecting to the database
-    MongoClient mongoClient = new MongoClient("localhost", 27017);
+    MongoClientURI connectionString = new MongoClientURI("mongodb://general:codeu@ds028310.mlab.com:28310/codeu");
+    MongoClient mongoClient = new MongoClient(connectionString);
     MongoDatabase database = mongoClient.getDatabase("codeu");
     MongoCollection<Document> collection = database.getCollection("users");
     
