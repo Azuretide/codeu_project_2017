@@ -64,7 +64,7 @@ JAVA&nbsp;7 when working with this project.
      + `<persistent-dir>`: the path where you want the server to save data between
        runs.
 
-     The startup arguments for `run_client.sh` are the following:
+     The startup arguments for `run_client.sh` and `run_simple_gui_client.sh` are the following:
      + `<host>`: the hostname or IP address of the computer on which the server
        is listening. If you are running server and client on the same computer,
        you can use `localhost` here.
@@ -81,6 +81,13 @@ for more information.
 In addition to your team's client and server, the project also includes a
 Relay Server and a script that runs it (`run_relay.sh`).
 This is not needed to get started with the project.
+
+
+## Feature Documentation
+
+Passwords - Passwords are now required for all users. When a new account is created with the u-add command, a password must be supplied in addition to a unique username that is not already used. The password is then required for all future sign-ins. Password recovery is currently not supported.
+ 
+Database Persistence - User account data is automatically persisted in an online instance of MongoDB. Any accounts created will remain even after multiple client and server sessions, which means that users should be able to see the accounts that other users have created. This feature is implemented automatically and requires no further action from the user to activate. 
 
 
 ## Finding your way around the project
