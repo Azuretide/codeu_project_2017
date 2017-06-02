@@ -40,7 +40,10 @@ JAVA&nbsp;7 when working with this project.
        $ sh run_server.sh <team_id> <team_secret> <port> <persistent-dir>
        $ sh run_client.sh <host> <port>
        ```
-
+     To run the simple GUI, replace the 2nd line with:
+       ```
+       $ sh run_simple_gui_client.sh <host> <port>
+       ```
      You must specify the following startup arguments for `run_server.sh:
      + `<team_id>` and `<team_secret>`: a numeric id for your team, and a secret
        code, which are used to authenticate your server with the Relay server.
